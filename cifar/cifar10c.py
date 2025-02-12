@@ -11,6 +11,7 @@ from utils import evaluate_metrics
 import tent
 import norm
 import cotta
+import cotta_selftrain
 
 from conf import cfg, load_cfg_fom_args
 
@@ -34,6 +35,9 @@ def evaluate(description):
         model = setup_tent(base_model)
     if cfg.MODEL.ADAPTATION == "cotta":
         logger.info("test-time adaptation: CoTTA")
+        model = setup_cotta(base_model)
+    if cfg.MODEL.ADAPTATION == "cotta_selftrain":
+        logger.info("test-time adaptation: CoTTA Self Train")
         model = setup_cotta(base_model)
     # evaluate on each severity and type of corruption in turn
     prev_ct = "x0"
@@ -97,7 +101,7 @@ def setup_tent(model):
 
 
 def setup_cotta(model):
-    """Set up tent adaptation.
+    """Set up CoTTA adaptation.
 
     Configure the model for training + feature modulation by batch statistics,
     collect the parameters for feature modulation by gradient optimization,
@@ -117,6 +121,26 @@ def setup_cotta(model):
     logger.info(f"optimizer for adaptation: %s", optimizer)
     return cotta_model
 
+def setup_cotta_selftrain(model):
+    """Set up CoTTA adaptation w/ self training cross entropy.
+
+    Configure the model for training + feature modulation by batch statistics,
+    collect the parameters for feature modulation by gradient optimization,
+    set up the optimizer, and then tent the model.
+    """
+    model = cotta_selftrain.configure_model(model)
+    params, param_names = cotta_selftrain.collect_params(model)
+    optimizer = setup_optimizer(params)
+    cotta_model = cotta_selftrain.CoTTA(model, optimizer,
+                           steps=cfg.OPTIM.STEPS,
+                           episodic=cfg.MODEL.EPISODIC,
+                           mt_alpha=cfg.OPTIM.MT,
+                           rst_m=cfg.OPTIM.RST,
+                           ap=cfg.OPTIM.AP)
+    logger.info(f"model for adaptation: %s", model)
+    logger.info(f"params for adaptation: %s", param_names)
+    logger.info(f"optimizer for adaptation: %s", optimizer)
+    return cotta_model
 
 def setup_optimizer(params):
     """Set up optimizer for tent adaptation.
