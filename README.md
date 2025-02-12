@@ -31,9 +31,12 @@ Authors: Nick Swetlin, Keenan Serrao, Ifunanya Okoroma, Ansh Mujral.
 
 Heavily inspired by Qin et. al.'s [initial work on COTTA.](https://github.com/qinenergy/cotta)
 Cite them:
+
+```bibtex
 @inproceedings{wang2022continual,
   title={Continual Test-Time Domain Adaptation},
   author={Wang, Qin and Fink, Olga and Van Gool, Luc and Dai, Dengxin},
   booktitle={Proceedings of Conference on Computer Vision and Pattern Recognition},
   year={2022}
 }
+```
