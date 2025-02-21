@@ -736,6 +736,10 @@ common_corruptions = OrderedDict([
     ('Standard', {
         'model': lambda: WideResNet(depth=28, widen_factor=10),
         'gdrive_id': '1t98aEuzeTL8P7Kpd5DIrCoCL21BNZUhC',
+    }),
+    ('Addepalli2022Efficient_WRN_34_10', {
+        'model': lambda: WideResNet(depth=34, widen_factor=10),
+        'gdrive_id': '1--dVDtZhAk4D2zMtTDwIGnImuCGxTcBA',
     })
 ])
 
