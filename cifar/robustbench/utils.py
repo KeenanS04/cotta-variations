@@ -207,6 +207,7 @@ def _safe_load_state_dict(model: nn.Module, model_name: str,
     return model
 
 
+
 def clean_accuracy(model: nn.Module,
                    x: torch.Tensor,
                    y: torch.Tensor,
@@ -215,6 +216,9 @@ def clean_accuracy(model: nn.Module,
     if device is None:
         device = x.device
     acc = 0.
+    actual = []
+    predicted = []
+
     n_batches = math.ceil(x.shape[0] / batch_size)
     with torch.no_grad():
         for counter in range(n_batches):
@@ -224,9 +228,13 @@ def clean_accuracy(model: nn.Module,
                        batch_size].to(device)
 
             output = model(x_curr)
-            acc += (output.max(1)[1] == y_curr).float().sum()
+            #acc += (output.max(1)[1] == y_curr).float().sum()
 
-    return acc.item() / x.shape[0]
+            actual.append(y_curr)
+            predicted.append(output.max(1)[1])
+
+    # return acc.item() / x.shape[0]
+    return (actual, predicted)
 
 
 def list_available_models(

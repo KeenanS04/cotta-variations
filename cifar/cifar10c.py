@@ -72,9 +72,11 @@ def evaluate(description):
                                            [corruption_type])
             x_test, y_test = x_test.cuda(), y_test.cuda()
             # metrics = evaluate_metrics(True, True, True, True, model< x_test, y_test, cfg.TEST.BATCH_SIZE)
-            acc = accuracy(model, x_test, y_test, cfg.TEST.BATCH_SIZE)
-            err = 1. - acc
-            logger.info(f"error % [{corruption_type}{severity}]: {metrics}")
+            arrs = accuracy(model, x_test, y_test, cfg.TEST.BATCH_SIZE)
+
+            # err = 1. - acc
+            logger.info(f"ACTUAL {corruption_type}{severity}: {arrs[0]}\n\n")
+            logger.info(f"PREDICTED {corruption_type}{severity}: {arrs[1]}\n\n")
 
 
 def setup_source(model):
