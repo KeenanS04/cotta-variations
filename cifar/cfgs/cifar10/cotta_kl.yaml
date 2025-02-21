@@ -1,6 +1,8 @@
+# Edit parameters in these files to change the behavior for scripts running COTTA_KL adaptation. If a parameter is commented out or not included, default configurations are taken from ../../conf.py 
+
 MODEL:
   ADAPTATION: cotta_kl
-  ARCH: Standard
+  # ARCH: Standard
   EPISODIC: true
 CKPT_DIR: ckpt
 DATA_DIR: data

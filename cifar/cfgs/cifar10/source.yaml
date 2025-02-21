@@ -1,6 +1,8 @@
+# Edit parameters in these files to change the behavior for scripts running NO adaptation. If a parameter is commented out or not included, default configurations are taken from ../../conf.py 
+
 MODEL:
   ADAPTATION: source
-  ARCH: Bartoldson2024Adversarial_WRN-94-16
+  # ARCH: Standard
 TEST:
   BATCH_SIZE: 200
 CORRUPTION:

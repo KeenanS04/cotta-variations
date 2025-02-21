@@ -26,7 +26,9 @@ cfg = _C
 _C.MODEL = CfgNode()
 
 # Check https://github.com/RobustBench/robustbench for available models
-_C.MODEL.ARCH = 'Bartoldson2024Adversarial_WRN-94-16'
+#Example: _C.MODEL.ARCH = 'Addepalli2022Efficient_WRN_34_10'
+_C.MODEL.ARCH = 'Standard' 
+
 
 # Choice of (source, norm, tent)
 # - source: baseline without adaptation
