@@ -54,7 +54,7 @@ _C.CORRUPTION.TYPE = ['gaussian_noise', 'shot_noise', 'impulse_noise',
 _C.CORRUPTION.SEVERITY = [5, 4, 3, 2, 1]
 
 # Number of examples to evaluate (10000 for all samples in CIFAR-10)
-_C.CORRUPTION.NUM_EX = 10000
+_C.CORRUPTION.NUM_EX = 100
 
 # ------------------------------- Batch norm options ------------------------ #
 _C.BN = CfgNode()
@@ -100,8 +100,8 @@ _C.OPTIM.AP = 0.92
 # ------------------------------- Testing options --------------------------- #
 _C.TEST = CfgNode()
 
-# Batch size for evaluation (and updates for norm + tent)
-_C.TEST.BATCH_SIZE = 128
+# Batch size for evaluation (and updates for norm, tent, cotta variations)
+_C.TEST.BATCH_SIZE = 100
 
 # --------------------------------- CUDNN options --------------------------- #
 _C.CUDNN = CfgNode()
