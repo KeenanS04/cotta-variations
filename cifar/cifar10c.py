@@ -6,6 +6,7 @@ import torch.optim as optim
 from robustbench.data import load_cifar10c
 from robustbench.model_zoo.enums import ThreatModel
 from robustbench.utils import load_model
+from robustbench.utils import clean_accuracy as accuracy # temporary: to resolve metrics issues
 from utils import evaluate_metrics
 
 import tent
@@ -70,7 +71,9 @@ def evaluate(description):
                                            severity, cfg.DATA_DIR, False,
                                            [corruption_type])
             x_test, y_test = x_test.cuda(), y_test.cuda()
-            metrics = evaluate_metrics(True, True, True, True, model< x_test, y_test, cfg.TEST.BATCH_SIZE)
+            # metrics = evaluate_metrics(True, True, True, True, model< x_test, y_test, cfg.TEST.BATCH_SIZE)
+            acc = accuracy(model, x_test, y_test, cfg.TEST.BATCH_SIZE)
+            err = 1. - acc
             logger.info(f"error % [{corruption_type}{severity}]: {metrics}")
 
 
@@ -248,3 +251,4 @@ def setup_optimizer(params):
 
 if __name__ == '__main__':
     evaluate('"CIFAR-10-C evaluation.')
+    evaluate_metrics()
