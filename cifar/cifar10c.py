@@ -12,6 +12,9 @@ import tent
 import norm
 import cotta
 import cotta_selftrain
+import cotta_poly
+import cotta_kl
+import cotta_cosine
 
 from conf import cfg, load_cfg_fom_args
 
@@ -37,8 +40,19 @@ def evaluate(description):
         logger.info("test-time adaptation: CoTTA")
         model = setup_cotta(base_model)
     if cfg.MODEL.ADAPTATION == "cotta_selftrain":
-        logger.info("test-time adaptation: CoTTA Self Train")
-        model = setup_cotta(base_model)
+        logger.info("test-time adaptation: CoTTA Self-Train")
+        model = setup_cotta_selftrain(base_model)
+    if cfg.MODEL.ADAPTATION == "cotta_kl":
+        logger.info("test-time adaptation: CoTTA w/ KL")
+        model = setup_cotta_kl(base_model)
+    if cfg.MODEL.ADAPTATION == "cotta_poly":
+        logger.info("test-time adaptation: CoTTA w/ POLYLOSS")
+        model = setup_cotta_poly(base_model)
+    if cfg.MODEL.ADAPTATION == "cotta_cosine":
+        logger.info("test-time adaptation: CoTTA w/ COSINE SIM.")
+        model = setup_cotta_sim(base_model)
+
+
     # evaluate on each severity and type of corruption in turn
     prev_ct = "x0"
     for severity in cfg.CORRUPTION.SEVERITY:
@@ -132,6 +146,69 @@ def setup_cotta_selftrain(model):
     params, param_names = cotta_selftrain.collect_params(model)
     optimizer = setup_optimizer(params)
     cotta_model = cotta_selftrain.CoTTA(model, optimizer,
+                           steps=cfg.OPTIM.STEPS,
+                           episodic=cfg.MODEL.EPISODIC,
+                           mt_alpha=cfg.OPTIM.MT,
+                           rst_m=cfg.OPTIM.RST,
+                           ap=cfg.OPTIM.AP)
+    logger.info(f"model for adaptation: %s", model)
+    logger.info(f"params for adaptation: %s", param_names)
+    logger.info(f"optimizer for adaptation: %s", optimizer)
+    return cotta_model
+
+def setup_cotta_poly(model):
+    """Set up CoTTA adaptation w/ Polyloss TODO which e?.
+
+    Configure the model for training + feature modulation by batch statistics,
+    collect the parameters for feature modulation by gradient optimization,
+    set up the optimizer, and then tent the model.
+    """
+    model = cotta_poly.configure_model(model)
+    params, param_names = cotta_poly.collect_params(model)
+    optimizer = setup_optimizer(params)
+    cotta_model = cotta_poly.CoTTA(model, optimizer,
+                           steps=cfg.OPTIM.STEPS,
+                           episodic=cfg.MODEL.EPISODIC,
+                           mt_alpha=cfg.OPTIM.MT,
+                           rst_m=cfg.OPTIM.RST,
+                           ap=cfg.OPTIM.AP)
+    logger.info(f"model for adaptation: %s", model)
+    logger.info(f"params for adaptation: %s", param_names)
+    logger.info(f"optimizer for adaptation: %s", optimizer)
+    return cotta_model
+
+def setup_cotta_kl(model):
+    """Set up CoTTA adaptation w/ self training cross entropy.
+
+    Configure the model for training + feature modulation by batch statistics,
+    collect the parameters for feature modulation by gradient optimization,
+    set up the optimizer, and then tent the model.
+    """
+    model = cotta_kl.configure_model(model)
+    params, param_names = cotta_kl.collect_params(model)
+    optimizer = setup_optimizer(params)
+    cotta_model = cotta_kl.CoTTA(model, optimizer,
+                           steps=cfg.OPTIM.STEPS,
+                           episodic=cfg.MODEL.EPISODIC,
+                           mt_alpha=cfg.OPTIM.MT,
+                           rst_m=cfg.OPTIM.RST,
+                           ap=cfg.OPTIM.AP)
+    logger.info(f"model for adaptation: %s", model)
+    logger.info(f"params for adaptation: %s", param_names)
+    logger.info(f"optimizer for adaptation: %s", optimizer)
+    return cotta_model
+
+def setup_cotta_cosine(model):
+    """Set up CoTTA adaptation w/ self training cross entropy.
+
+    Configure the model for training + feature modulation by batch statistics,
+    collect the parameters for feature modulation by gradient optimization,
+    set up the optimizer, and then tent the model.
+    """
+    model = cotta_cosine.configure_model(model)
+    params, param_names = cotta_cosine.collect_params(model)
+    optimizer = setup_optimizer(params)
+    cotta_model = cotta_cosine.CoTTA(model, optimizer,
                            steps=cfg.OPTIM.STEPS,
                            episodic=cfg.MODEL.EPISODIC,
                            mt_alpha=cfg.OPTIM.MT,
