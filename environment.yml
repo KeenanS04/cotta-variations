@@ -1,4 +1,4 @@
-name: cotta
+name: cotta-variations
 channels:
   - pytorch
   - defaults
