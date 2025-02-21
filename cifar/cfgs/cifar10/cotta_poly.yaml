@@ -1,5 +1,5 @@
 MODEL:
-  ADAPTATION: cotta
+  ADAPTATION: cotta_poly
   ARCH: Standard
   EPISODIC: true
 CKPT_DIR: ckpt
