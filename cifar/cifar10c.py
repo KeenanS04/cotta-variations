@@ -1,4 +1,6 @@
 import logging
+import os
+import simplejson
 
 import torch
 import torch.optim as optim
@@ -17,7 +19,7 @@ import cotta_poly
 import cotta_kl
 import cotta_cosine
 
-import metrics
+from metrics import *
 
 from conf import cfg, load_cfg_fom_args
 
@@ -79,6 +81,18 @@ def evaluate(description):
             # err = 1. - acc
             logger.info(f"ACTUAL {corruption_type}{severity}: {arrs[0]}\n\n")
             logger.info(f"PREDICTED {corruption_type}{severity}: {arrs[1]}\n\n")
+
+def apply_metrics(filepath):
+    '''Should run immediately after evaluate() in a script. Reads the log from evaluate() and creates a new log summarizing information into a txt.'''
+    assert(filepath[-4:] == '.txt')
+    filepath_start, filepath_end = '/'.join(filepath.split('/')[:-1]), filepath.split('/')[-1]
+    out_filepath = filepath_start + '/../output_metrics/' + filepath_end[:-4] + '_metrics.txt'
+    corr_values = extract_corruption_values(filepath) 
+    recieved_metrics = calculate_metrics(corr_values)
+    with open(out_filepath, "w") as f:
+        line = f'METRICS FOR {filepath_end.upper()}'
+        f.write(('\n\n' + '#' * len(line)) + '\n' + line + '\n' + ('#' * len(line)) + '\n\n')
+        f.write(f'{simplejson.dumps(recieved_metrics, indent = 4)}')
 
 
 def setup_source(model):
@@ -255,4 +269,6 @@ def setup_optimizer(params):
 
 if __name__ == '__main__':
     evaluate('"CIFAR-10-C evaluation.')
-    evaluate_metrics()
+    fp = f'{os.path.join(cfg.SAVE_DIR, cfg.LOG_DEST)}'
+    apply_metrics(fp)
+

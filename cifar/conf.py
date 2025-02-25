@@ -54,7 +54,7 @@ _C.CORRUPTION.TYPE = ['gaussian_noise', 'shot_noise', 'impulse_noise',
 _C.CORRUPTION.SEVERITY = [5, 4, 3, 2, 1]
 
 # Number of examples to evaluate (10000 for all samples in CIFAR-10)
-_C.CORRUPTION.NUM_EX = 100
+_C.CORRUPTION.NUM_EX = 10000
 
 # ------------------------------- Batch norm options ------------------------ #
 _C.BN = CfgNode()
