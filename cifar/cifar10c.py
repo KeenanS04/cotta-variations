@@ -17,6 +17,8 @@ import cotta_poly
 import cotta_kl
 import cotta_cosine
 
+import metrics
+
 from conf import cfg, load_cfg_fom_args
 
 
@@ -51,7 +53,7 @@ def evaluate(description):
         model = setup_cotta_poly(base_model)
     if cfg.MODEL.ADAPTATION == "cotta_cosine":
         logger.info("test-time adaptation: CoTTA w/ COSINE SIM.")
-        model = setup_cotta_sim(base_model)
+        model = setup_cotta_cosine(base_model)
 
 
     # evaluate on each severity and type of corruption in turn
@@ -67,7 +69,7 @@ def evaluate(description):
                     logger.warning("not resetting model")
             else:
                 logger.warning("not resetting model")
-            x_test, y_test = load_cifar10c(10000,
+            x_test, y_test = load_cifar10c(cfg.CORRUPTION.NUM_EX,
                                            severity, cfg.DATA_DIR, False,
                                            [corruption_type])
             x_test, y_test = x_test.cuda(), y_test.cuda()

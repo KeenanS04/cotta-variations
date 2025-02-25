@@ -63,7 +63,7 @@ dependencies:
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.4.9=haebb681_0
   - pip:
-    - addict==2.4.0 # TODO add regex
+    - addict==2.4.0 # TODO see if 're' import works
     - appdirs==1.4.4
     - attr==0.3.1
     - attrs==21.2.0
@@ -110,6 +110,7 @@ dependencies:
     - scikit-learn==1.0.1
     - scipy==1.7.1
     - simplejson==3.17.5
+    - re
     - submitit==1.4.0
     - threadpoolctl==3.0.0
     - tifffile==2021.10.12
