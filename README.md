@@ -11,20 +11,16 @@ conda env create -f environment.yml
 conda activate cotta 
 ```
 
-## Classification Experiments
+## Classification Experiment
 ### CIFAR10-to-CIFAR10C-standard task
 ```bash
-# Tested on RTX2080TI
 cd cifar
 # This includes the comparison of all three methods as well as baseline
 bash run_cifar10.sh 
 ```
 
-### CIFAR100-to-CIFAR100C task
-```bash
-# Tested on RTX3090
-bash run_cifar100.sh
-```
+Running the above gets the "raw" results for our experiment, in terms of predicted labels and true labels for our experiment with 10,000 images.
+
 
 # Citations
 Authors: Nick Swetlin, Keenan Serrao, Ifunanya Okoroma, Ansh Mujral.
