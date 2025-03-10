@@ -45,7 +45,9 @@ These models (M1 - M7) are sorted by size for convenience.
 
 # Citations
 Authors: Nick Swetlin, Keenan Serrao, Ifunanya Okoroma, Ansh Mujral.
+
 Mentor: Jun Kun Wang
+
 Cite us:
 ```bibtex
 @inproceedings{nkia2025cottavars,
